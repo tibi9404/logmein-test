@@ -8,14 +8,21 @@ import cucumber.api.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import pageObjects.AjaxFormSubmit;
+import pageObjects.CheckboxDemo;
 import pageObjects.HomePage;
 import pageObjects.SimpleFormDemo;
 
 public class BasicTests {
 
     private static WebDriver driver;
+    private  WebDriverWait wait;
     private HomePage homePage;
     private SimpleFormDemo simpleFormDemo;
+    private CheckboxDemo checkboxDemo;
+    private AjaxFormSubmit ajaxFormSubmit;
 
     @Before
     public void setup(){
@@ -23,6 +30,9 @@ public class BasicTests {
         driver = new ChromeDriver();
         homePage = new HomePage();
         simpleFormDemo = new SimpleFormDemo();
+        checkboxDemo = new CheckboxDemo();
+        ajaxFormSubmit = new AjaxFormSubmit();
+        wait  = new WebDriverWait(driver,5);
     }
 
     @After
@@ -44,9 +54,23 @@ public class BasicTests {
         homePage.getInputFormsDropdown(driver).click();
     }
 
-    @When("^I choose 'Simple Form Demo' item$")
-    public void iChooseSimpleFormDemoItem() {
-        homePage.getSimpleFormDemoItem(driver).click();
+    @When("^I choose '(.*)' item$")
+    public void iChooseSimpleFormDemoItem(String menuItem) {
+        switch (menuItem) {
+
+            case "Simple Form Demo":
+                homePage.getSimpleFormDemoItem(driver).click();
+                break;
+
+            case "Checkbox Demo":
+                homePage.getCheckboxDemoItem(driver).click();
+                break;
+
+            case "Ajax Form Submit":
+                homePage.getAjaxFormSubmitItem(driver).click();
+                break;
+        }
+
     }
 
     @When("^I enter 5 in the 'a' input field$")
@@ -64,6 +88,25 @@ public class BasicTests {
         simpleFormDemo.getGetTotalButton(driver).click();
     }
 
+    @When("^I tick the single checkbox$")
+    public void iTickTheSingleCheckbox() {
+        checkboxDemo.getCheckBox(driver).click();
+    }
+
+    @When("^I attempt to submit the form$")
+    public void iAttemptToSubmitTheForm() {
+        ajaxFormSubmit.getSubmitButton(driver).click();
+    }
+
+    @When("^I fill the '(.*)' input field$")
+    public void iFillTheInputField(String param) {
+        if ("Name".equals(param)) {
+            ajaxFormSubmit.getNameInputField(driver).sendKeys("Name value");
+        } else {
+            ajaxFormSubmit.getCommentInputField(driver).sendKeys("Comment value");
+        }
+    }
+
     @Then("^It should contain the string '(.*)'$")
     public void itShouldContainTheString(String expectedValue) {
         Assert.assertTrue(homePage.getPageTitle(driver).getText().contains(expectedValue));
@@ -72,6 +115,21 @@ public class BasicTests {
     @Then("^the result should be '(.*)'$")
     public void theResultShouldBe(String expectedValue) {
         Assert.assertEquals(expectedValue, simpleFormDemo.getResult(driver).getText());
+    }
+
+    @Then("^the successful result message is appeared$")
+    public void theSuccessfulResultMessageIsAppeared() {
+        Assert.assertEquals("Success - Check box is checked", checkboxDemo.getCheckBoxResultMessage(driver).getText());
+    }
+
+    @Then("^the form (.*) submitted$")
+    public void theFormSubmitted(String action) {
+        if (action.equals("is")) {
+            wait.until(ExpectedConditions.textToBePresentInElement(ajaxFormSubmit.getSubmitResultSuccessfulMessage(driver), "Form submited Successfully!"));
+        } else {
+            Assert.assertTrue(ajaxFormSubmit.getSubmitButton(driver).isDisplayed());
+            Assert.assertEquals("border: 1px solid rgb(255, 0, 0);", ajaxFormSubmit.getNameInputField(driver).getAttribute("style"));
+        }
     }
 
 }

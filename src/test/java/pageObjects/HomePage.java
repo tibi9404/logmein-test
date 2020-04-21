@@ -24,4 +24,12 @@ public class HomePage {
         return driver.findElement(By.cssSelector("#navbar-brand-centered > ul:nth-child(1) > li.dropdown.open > ul > li:nth-child(1)"));
     }
 
+    public WebElement getCheckboxDemoItem(WebDriver driver) {
+        return driver.findElement(By.cssSelector("#navbar-brand-centered > ul:nth-child(1) > li.dropdown.open > ul > li:nth-child(2)"));
+    }
+
+    public WebElement getAjaxFormSubmitItem(WebDriver driver) {
+        return driver.findElement(By.cssSelector("#navbar-brand-centered > ul:nth-child(1) > li.dropdown.open > ul > li:nth-child(6)"));
+    }
+
 }
