@@ -1,7 +1,7 @@
-The application requires JDK 11 and Gradle 5.6.3 to run.
+The application requires **JDK 11**.
 
-To run the tests simply execute the following command in a command line tool: gradle cucumber
+To run the tests simply execute the following command in a command line tool: _./gradlew cucumber_
 
 In the console you can follow the test results.
 
-The tests run with chromedriver for Chrome version 80. 
+The tests run with chromedriver with **Chrome version 80**. 

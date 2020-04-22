@@ -17,8 +17,8 @@ import pageObjects.SimpleFormDemo;
 
 public class BasicTests {
 
-    private static WebDriver driver;
-    private  WebDriverWait wait;
+    private WebDriver driver;
+    private WebDriverWait wait;
     private HomePage homePage;
     private SimpleFormDemo simpleFormDemo;
     private CheckboxDemo checkboxDemo;
@@ -28,15 +28,15 @@ public class BasicTests {
     public void setup(){
         System.setProperty("webdriver.chrome.driver", "src/test/resources/webdrivers/chromedriver.exe");
         driver = new ChromeDriver();
+        wait  = new WebDriverWait(driver,5);
         homePage = new HomePage();
         simpleFormDemo = new SimpleFormDemo();
         checkboxDemo = new CheckboxDemo();
         ajaxFormSubmit = new AjaxFormSubmit();
-        wait  = new WebDriverWait(driver,5);
     }
 
     @After
-    public void teatDown(){
+    public void tearDown(){
         driver.close();
     }
 
@@ -73,14 +73,14 @@ public class BasicTests {
 
     }
 
-    @When("^I enter 5 in the 'a' input field$")
-    public void iEnter5InTheAInputField() {
-        simpleFormDemo.getInputFieldA(driver).sendKeys("5");
+    @When("^I enter (.*) in the 'a' input field$")
+    public void iEnter5InTheAInputField(String value) {
+        simpleFormDemo.getInputFieldA(driver).sendKeys(value);
     }
 
-    @When("^I enter 6 in the 'b' input field$")
-    public void iEnter6InTheBInputField() {
-        simpleFormDemo.getInputFieldB(driver).sendKeys("6");
+    @When("^I enter (.*) in the 'b' input field$")
+    public void iEnter6InTheBInputField(String value) {
+        simpleFormDemo.getInputFieldB(driver).sendKeys(value);
     }
 
     @When("^I click on the 'Get total' button$")
